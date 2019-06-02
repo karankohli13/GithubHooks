@@ -1,8 +1,10 @@
 #!/bin/bash
 
-wget -O projectmaster.zip -q https://github.com/Codernauts/Hermes/archive/master.zip
+branch=$1
 
-target_dir="Produccion-Social"
+wget -O projectmaster.zip -q "https://github.com/karankohli13/marketsfx-vue/archive/$branch.zip"
+
+target_dir="marketsfx-vue"
 
 if [ -f projectmaster.zip ]; then
 
@@ -10,17 +12,11 @@ if [ -f projectmaster.zip ]; then
 
     rm projectmaster.zip
 
-    cp config.json "Hermes-master"
-
-    (cd "Hermes-master"; npm i)
-
-    pm2 stop "Hermes"
+    (cd "staging-$branch"; npm i; npm run build)
 
     rm -rf $target_dir
 
-    mv Hermes-master $target_dir
-
-    pm2 start "Hermes"
+    mv "staging-$branch" $target_dir
 
     sleep 5
 
